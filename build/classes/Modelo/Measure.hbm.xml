@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 25, 2017 12:10:19 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Modelo.Measure" table="measure" catalog="sgmudenar" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="measurement" class="Modelo.Measurement" fetch="select">
+            <column name="id_measurement" not-null="true" />
+        </many-to-one>
+        <many-to-one name="quantity" class="Modelo.Quantity" fetch="select">
+            <column name="id_quantity" not-null="true" />
+        </many-to-one>
+        <property name="value" type="double">
+            <column name="value" precision="22" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

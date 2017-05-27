@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 25, 2017 12:10:19 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Modelo.Quantity" table="quantity" catalog="sgmudenar" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="45" not-null="true" />
+        </property>
+        <property name="symbol" type="string">
+            <column name="symbol" length="45" />
+        </property>
+        <property name="unit" type="string">
+            <column name="unit" length="45" />
+        </property>
+        <property name="unitSymbol" type="string">
+            <column name="unit_symbol" length="45" />
+        </property>
+        <set name="measures" table="measure" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_quantity" not-null="true" />
+            </key>
+            <one-to-many class="Modelo.Measure" />
+        </set>
+    </class>
+</hibernate-mapping>
