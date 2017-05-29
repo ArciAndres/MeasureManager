@@ -15,7 +15,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import Vista.InsertMeasure;
+import java.sql.Time;
 import java.util.Arrays;
+import java.util.Calendar;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.hibernate.Query;
@@ -119,33 +121,51 @@ public class Operaciones {
             public void run() {
                     System.out.println("Entró a la función run");
                     List<Measure> measures = new ArrayList<Measure>();
+                    List<List<Measure>> measuresTotal = new ArrayList<List<Measure>>();
+                    List<Measurement> measurements = new ArrayList<Measurement>();
+
+                    Date now = new Date();
+                    
                     try{
                         for (int phase = 0; phase < phases.length; phase++) {
                             if (phases[phase] == true) {
-                                Measurement measurement = new Measurement(meter, new Date(), phase);
-//                          JTextField TextField_insertedMeasurements = InsertMeasure.insertMeasure.getTextField_insertedMeasurements();
-                                measurement = insertSingleMeasurement(measurement);
+                                measures = new ArrayList<Measure>();
+                                measurements.add(new Measurement(meter, now, phase));
                                 for (int j = 1; j <= numMeasures; j++) {
                                     Quantity quantity = new Quantity();
                                     quantity.setId(j);
-                                    measures.add(new Measure(measurement, quantity, measureValues[j-1]*(1 + tolerance*(Math.random()*2-1)/100)));
-                                    conta++;
-                                    insertMeasureView.getTextField_insertedMeasures().setText(String.valueOf(conta));
+                                    measures.add(new Measure(measurements.get(measurements.size()-1), quantity, measureValues[j-1]*(1 + tolerance*(Math.random()*2-1)/100)));
                                 }
-                                conta2++;
-                                insertMeasureView.getTextField_insertedMeasurements().setText(String.valueOf(conta2));
-                                insertListMeasures(measures);
+                                measuresTotal.add(measures);
                                 System.out.println("Medidas de fase " + phase + " insertadas");
                             }
                         }
-                        if (!isAnyTrue(phases)) {
+                        if (!customMethods.isAnyTrue(phases)) {
                             System.out.println("Ninguna fase seleccionada. Revise la pestaña Measurement");
                         }
                     }
                     catch(Exception ex){
                         System.out.println("Hubo en error en la ejecución. Error: " + ex.toString());
                     }
+                    
+                    if(modelMethods.getComparativeTime(now))
+                    {
+                        for (int index = 0; index < measurements.size(); index++) {
+                            Measurement measurement = insertSingleMeasurement(measurements.get(index));
+                            for (int m = 0; m < measuresTotal.get(index).size(); m++) {
+                                measuresTotal.get(index).get(m).setMeasurement(measurement);
+                                conta++;
+                                insertMeasureView.getTextField_insertedMeasures().setText(String.valueOf(conta));
+                            }
+                            conta2++;
+                            insertListMeasures(measuresTotal.get(index));
+                            insertMeasureView.getTextField_insertedMeasurements().setText(String.valueOf(conta2));
+                        }
+                    }   
             }
+                    
+                    
+            
         };
         
         executor = Executors.newScheduledThreadPool(1);
@@ -153,12 +173,7 @@ public class Operaciones {
         
         
     }
-    
-    public static boolean isAnyTrue(boolean[] array)
-    {
-        for(boolean b : array) if(b) return true;
-        return false;
-    }
+   
 
     public void stopInfiniteLoop() {
         System.out.println("Entró al stopInfiniteLoop");

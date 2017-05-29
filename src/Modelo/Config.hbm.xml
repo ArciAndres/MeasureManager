@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated May 28, 2017 9:40:44 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Modelo.Config" table="config" catalog="sgmudenar" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="meter" class="Modelo.Meter" fetch="select">
+            <column name="idmeter" />
+        </many-to-one>
+        <property name="element" type="string">
+            <column name="element" length="45" />
+        </property>
+        <property name="text" type="string">
+            <column name="text" length="1000" />
+        </property>
+        <property name="value" type="java.lang.Double">
+            <column name="value" precision="22" scale="0" />
+        </property>
+        <property name="boolean_" type="java.lang.Boolean">
+            <column name="boolean" />
+        </property>
+        <property name="timespan" type="time">
+            <column name="timespan" length="8" />
+        </property>
+    </class>
+</hibernate-mapping>
