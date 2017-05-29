@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import Vista.InsertMeasure;
 import java.sql.Time;
+import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Calendar;
 import org.hibernate.SessionFactory;
@@ -115,57 +116,100 @@ public class Operaciones {
         
         
         Runnable scriptRunnable = new Runnable() {    
-            int conta = 0;
-            int conta2 = 0;
-
+            // Se puede determinar el período en el que se actualizan las medidas, pero a la base de datos solamente
+            //se cargan con el período que se especifica en la fila de configuración recordTime de esta.
+            
             public void run() {
-                    System.out.println("Entró a la función run");
+                System.out.println("Entró a la función run");
+                
+                Date now = new Date();
+                FormatMeasure formatmeasure = new FormatMeasure();
+                formatmeasure.setDate(now);
+
+                List<FPhase> fphases = new ArrayList<FPhase>();
+                try{
+                    for (int phase = 0; phase < phases.length; phase++) {
+                        FPhase fphase = new FPhase();
+                        fphase.setPhase(phase);
+                        List<Fmeasure> fmeasures = new ArrayList<>();
+                        for (int j = 1; j <= numMeasures; j++) {
+                            Fmeasure fmeasure = new Fmeasure();
+                            fmeasure.setQuantityID(j);
+                            fmeasure.setValue(measureValues[j-1]*(1 + tolerance*(Math.random()*2-1)/100));
+                            fmeasures.add(fmeasure);
+                        }
+                        fphase.setFmeasures(fmeasures);
+                        fphases.add(fphase);
+                    }
+                    formatmeasure.setFPhases(fphases);
+                    customMethods.toJson(formatmeasure,"D:\\file.json");
+                    if (!customMethods.isAnyTrue(phases)) {
+                        System.out.println("Ninguna fase seleccionada. Revise la pestaña Measurement");
+                    }
+                }
+                catch(Exception ex){
+                    System.out.println("Hubo en error en la ejecución. Error: " + ex.toString());
+                }
+
+
+
+//                    try{
+//                        for (int phase = 0; phase < phases.length; phase++) {
+//                            if (phases[phase] == true) {
+//                                measures = new ArrayList<Measure>();
+//                                measurements.add(new Measurement(meter, now, phase));
+//                                for (int j = 1; j <= numMeasures; j++) {
+//                                    Quantity quantity = new Quantity();
+//                                    quantity.setId(j);
+//                                    measures.add(new Measure(measurements.get(measurements.size()-1), quantity, measureValues[j-1]*(1 + tolerance*(Math.random()*2-1)/100)));
+//                                }
+//                                measuresTotal.add(measures);
+//                            }
+//                            List<Object> activity = new ArrayList<Object>();
+//                            activity.add(measurements);
+//                            activity.add(measures);
+//                            
+//                            customMethods.toJson(measures,"D:\\file.json");
+//                            
+//                        }
+//                        if (!customMethods.isAnyTrue(phases)) {
+//                            System.out.println("Ninguna fase seleccionada. Revise la pestaña Measurement");
+//                        }
+//                    }
+//                    catch(Exception ex){
+//                        System.out.println("Hubo en error en la ejecución. Error: " + ex.toString());
+//                    }
+//                    
+
+                if(modelMethods.getComparativeTime(now))
+                {
+                    int conta = 0, conta2 = 0;
                     List<Measure> measures = new ArrayList<Measure>();
                     List<List<Measure>> measuresTotal = new ArrayList<List<Measure>>();
                     List<Measurement> measurements = new ArrayList<Measurement>();
-
-                    Date now = new Date();
                     
-                    try{
-                        for (int phase = 0; phase < phases.length; phase++) {
-                            if (phases[phase] == true) {
-                                measures = new ArrayList<Measure>();
-                                measurements.add(new Measurement(meter, now, phase));
-                                for (int j = 1; j <= numMeasures; j++) {
-                                    Quantity quantity = new Quantity();
-                                    quantity.setId(j);
-                                    measures.add(new Measure(measurements.get(measurements.size()-1), quantity, measureValues[j-1]*(1 + tolerance*(Math.random()*2-1)/100)));
-                                }
-                                measuresTotal.add(measures);
-                                System.out.println("Medidas de fase " + phase + " insertadas");
-                            }
+                    for (int i = 0; i < fphases.size(); i++) {
+                        FPhase phase = fphases.get(i);
+                        measures = new ArrayList<Measure>();
+                        Measurement measurement = new Measurement(meter, now, phase.getPhase());
+                        measurement = insertSingleMeasurement(measurement);
+                        
+                        List<Fmeasure> fmeasures = phase.getFmeasures();
+                        
+                        for (int j = 0; j < fmeasures.size(); j++) {
+                            Quantity quantity = new Quantity();
+                            quantity.setId(fmeasures.get(j).getQuantityID());
+                            measures.add(new Measure(measurement, quantity, fmeasures.get(j).getValue()));
+                            conta++;
+                            insertMeasureView.getTextField_insertedMeasures().setText(String.valueOf(conta));
                         }
-                        if (!customMethods.isAnyTrue(phases)) {
-                            System.out.println("Ninguna fase seleccionada. Revise la pestaña Measurement");
-                        }
+                        conta2++;
+                        insertListMeasures(measures);
+                        insertMeasureView.getTextField_insertedMeasurements().setText(String.valueOf(conta2));
+                        System.out.println("Medidas insertadas");               
                     }
-                    catch(Exception ex){
-                        System.out.println("Hubo en error en la ejecución. Error: " + ex.toString());
-                    }
-                    
-                    if(modelMethods.getComparativeTime(now))
-                    {
-                        for (int index = 0; index < measurements.size(); index++) {
-                            Measurement measurement = insertSingleMeasurement(measurements.get(index));
-                            for (int m = 0; m < measuresTotal.get(index).size(); m++) {
-                                measuresTotal.get(index).get(m).setMeasurement(measurement);
-                                conta++;
-                                insertMeasureView.getTextField_insertedMeasures().setText(String.valueOf(conta));
-                            }
-                            conta2++;
-                            insertListMeasures(measuresTotal.get(index));
-                            insertMeasureView.getTextField_insertedMeasurements().setText(String.valueOf(conta2));
-                        }
-                    }   
+                }   
             }
-                    
-                    
-            
         };
         
         executor = Executors.newScheduledThreadPool(1);
