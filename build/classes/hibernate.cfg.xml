@@ -46,12 +46,14 @@ Contributor(s):
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/sgmudenar?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">1q2w3e4R</property>
-    <mapping resource="Modelo/Log.hbm.xml"/>
     <mapping resource="Modelo/Measurement.hbm.xml"/>
     <mapping resource="Modelo/Meter.hbm.xml"/>
+    <mapping resource="Modelo/User.hbm.xml"/>
+    <mapping resource="Modelo/Digitalcontrol.hbm.xml"/>
+    <mapping resource="Modelo/Config.hbm.xml"/>
     <mapping resource="Modelo/Location.hbm.xml"/>
     <mapping resource="Modelo/Quantity.hbm.xml"/>
-    <mapping resource="Modelo/Digitalcontrol.hbm.xml"/>
     <mapping resource="Modelo/Measure.hbm.xml"/>
+    <mapping resource="Modelo/Log.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

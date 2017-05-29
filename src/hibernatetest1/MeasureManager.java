@@ -7,7 +7,7 @@ import Vista.InsertMeasure;
  *
  * @author ANDRES ARCINIEGAS
  */
-public class HibernateTest1 {
+public class MeasureManager {
 
     /**
      * @param args the command line arguments

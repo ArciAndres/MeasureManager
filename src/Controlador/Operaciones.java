@@ -124,7 +124,6 @@ public class Operaciones {
                             if (phases[phase] == true) {
                                 Measurement measurement = new Measurement(meter, new Date(), phase);
 //                          JTextField TextField_insertedMeasurements = InsertMeasure.insertMeasure.getTextField_insertedMeasurements();
-                                measurement.setTime(new Date());
                                 measurement = insertSingleMeasurement(measurement);
                                 for (int j = 1; j <= numMeasures; j++) {
                                     Quantity quantity = new Quantity();
@@ -151,6 +150,8 @@ public class Operaciones {
         
         executor = Executors.newScheduledThreadPool(1);
         executor.scheduleAtFixedRate(scriptRunnable, 0, period, TimeUnit.SECONDS);
+        
+        
     }
     
     public static boolean isAnyTrue(boolean[] array)

@@ -1,5 +1,5 @@
 package Modelo;
-// Generated Jan 25, 2017 12:10:19 AM by Hibernate Tools 4.3.1
+// Generated May 28, 2017 8:18:43 PM by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -16,21 +16,25 @@ public class Meter  implements java.io.Serializable {
      private String ip;
      private String name;
      private String comments;
+     private String macAddress;
      private Set digitalcontrols = new HashSet(0);
      private Set measurements = new HashSet(0);
      private Set logs = new HashSet(0);
+     private Set configs = new HashSet(0);
 
     public Meter() {
     }
 
-    public Meter(Location location, String ip, String name, String comments, Set digitalcontrols, Set measurements, Set logs) {
+    public Meter(Location location, String ip, String name, String comments, String macAddress, Set digitalcontrols, Set measurements, Set logs, Set configs) {
        this.location = location;
        this.ip = ip;
        this.name = name;
        this.comments = comments;
+       this.macAddress = macAddress;
        this.digitalcontrols = digitalcontrols;
        this.measurements = measurements;
        this.logs = logs;
+       this.configs = configs;
     }
    
     public Integer getId() {
@@ -68,6 +72,13 @@ public class Meter  implements java.io.Serializable {
     public void setComments(String comments) {
         this.comments = comments;
     }
+    public String getMacAddress() {
+        return this.macAddress;
+    }
+    
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
+    }
     public Set getDigitalcontrols() {
         return this.digitalcontrols;
     }
@@ -88,6 +99,13 @@ public class Meter  implements java.io.Serializable {
     
     public void setLogs(Set logs) {
         this.logs = logs;
+    }
+    public Set getConfigs() {
+        return this.configs;
+    }
+    
+    public void setConfigs(Set configs) {
+        this.configs = configs;
     }
 
 
