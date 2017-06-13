@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated May 28, 2017 9:40:44 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Jun 11, 2017 11:33:44 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="Modelo.Log" table="log" catalog="sgmudenar" optimistic-lock="version">
         <id name="id" type="int">
@@ -9,10 +9,10 @@
             <generator class="assigned" />
         </id>
         <many-to-one name="location" class="Modelo.Location" fetch="select">
-            <column name="id_location" />
+            <column name="locationId" />
         </many-to-one>
         <many-to-one name="meter" class="Modelo.Meter" fetch="select">
-            <column name="id_meter" />
+            <column name="meterId" />
         </many-to-one>
         <property name="time" type="timestamp">
             <column name="time" length="19" />

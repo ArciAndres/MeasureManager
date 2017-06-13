@@ -1,5 +1,9 @@
 package Controlador;
 
+import ADE.*;
+import ModeloInterno.FormatMeasure;
+import ModeloInterno.Fmeasure;
+import ModeloInterno.FPhase;
 import Modelo.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,113 +18,49 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import Vista.InsertMeasure;
+import Vista.MeasureManagerGUI;
+import com.pi4j.io.i2c.I2CFactory;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.sql.Time;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.stream.Collectors;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
 
 public class Operaciones {
-    private InsertMeasure insertMeasureView;
-    
-    public Operaciones(InsertMeasure i){
-        insertMeasureView = i;
+    private MeasureManagerGUI measureManagerGUI;
+    String jsonAddress ;
+    public Operaciones(MeasureManagerGUI i){
+        measureManagerGUI = i;
+        ADERegister.initRegisterlist();
     }
     
-    double[] quantityValues = new double[]{120,30,360,10,365,60,0.7};
+    int[] quantitiesIDtoMeasureInst = new int[]{18,19}; // 18 y 19 = V e I RMS
     ScheduledExecutorService executor;
     
-    public Measurement insertSingleMeasurement(Measurement measurement)
-    {
-        SessionFactory sessionFactory = NewHibernateUtil.getSessionFactory();
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        int id = (int)session.save(measurement);
-        tx.commit();
-        measurement = (Measurement)session.get(Measurement.class, id);
-        session.close();
-        //JOptionPane.showMessageDialog(null, "Single Measurement inserted correctly");
-        return measurement;
-    }
-    public void insertSingleMeasure(Measurement measurement, Measure measure)
-    {
-        SessionFactory sessionFactory = NewHibernateUtil.getSessionFactory();
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        measure.setMeasurement(measurement);
-        session.save(measure);
-        tx.commit();
-        session.close();
-        //JOptionPane.showMessageDialog(null, "Single Measure inserted correctly");
-    }
-    
-    public void insertListMeasures(List<Measure> Measures)
-    {
-        SessionFactory sessionFactory = NewHibernateUtil.getSessionFactory();
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        for (Iterator<Measure> iterator = Measures.iterator(); iterator.hasNext();) {
-            Measure measure = iterator.next();
-            session.save(measure);
-        }        
-        tx.commit();
-        session.close();
-        //JOptionPane.showMessageDialog(null, "List of Measures inserted correctly");
-    }
-    
-    public void insertMeasureNow(Measurement measurement, List<Measure> Measures)
-    {
-        measurement = insertSingleMeasurement(measurement);
-        for (Iterator<Measure> iterator = Measures.iterator(); iterator.hasNext();) {
-            Measure measure = iterator.next();
-            insertSingleMeasure(measurement, measure);
-        }
-
-        JOptionPane.showMessageDialog(null, "Whole inserting operation went well!!");
-    }
-    
-    public void loopInsertMeasures(Measurement measurement, int numMeasurements, int numMeasures , double value, double tolerance)
-    {
-        int conta = 0;
-        List<Measure> measures = new ArrayList<Measure>();
-        Quantity quantity = new Quantity();
-        long startTime = System.currentTimeMillis();
-        for (int i = 0; i < numMeasurements; i++) {
-           measurement.setTime(new Date());
-           measurement = insertSingleMeasurement(measurement);
-            for (int j = 1; j <= numMeasures; j++) {
-                quantity = new Quantity();
-                quantity.setId(j);
-                measures.add(new Measure(measurement, quantity, value + tolerance*(Math.random()*2-1)));
-                conta++;
-            }
-            insertListMeasures(measures);
-        }
-        long estimatedTime = System.currentTimeMillis() - startTime;
-        JOptionPane.showMessageDialog(null, "Whole List Operation was hell Ok!!" + " Conta = " + Integer.toString(conta) + " time = " + Long.toString(estimatedTime));
-    }
-
-    public void loopInfinite(double voltage, double current, double powerFactor, double frequency, double phaseValue,long period, int id_meter, boolean[] phases, int numMeasurements, int numMeasures, int tolerance) 
-    {
-        double powerReal = voltage*current;
-        double powerAparent = powerReal/powerFactor;
-        double powerReactive = Math.sqrt(Math.pow(powerAparent,2) - Math.pow(powerReal,2));
+    public void loopInfinite(double voltage, double current, double powerFactor, double frequency, double phaseValue,long period, int id_meter, boolean[] phases, int numMeasurements, int numMeasures, int tolerance, boolean aleatorios, int iterationsForMeanValue) throws I2CFactory.UnsupportedBusNumberException, IOException, InterruptedException
+    {        
         Meter meter = new Meter();
         meter.setId(id_meter);
-        phaseValue = Math.acos(powerFactor)*180/Math.PI;
-        double[] measureValues = new double[]{voltage,current,powerReal,powerReactive,powerAparent,phaseValue,powerFactor};
+        jsonAddress = customMethods.getJsonAddress();
+        List<ADERegister> instRegisters = ADEController.getRegistersByQuantityID(quantitiesIDtoMeasureInst);
+        if (!aleatorios) {
+            ADEController.inicializacionADE();
+        }
         
         
         Runnable scriptRunnable = new Runnable() {    
             // Se puede determinar el período en el que se actualizan las medidas, pero a la base de datos solamente
-            //se cargan con el período que se especifica en la fila de configuración recordTime de esta.
-            
-            public void run() {
-                System.out.println("Entró a la función run");
+            // se cargan con el período que se especifica en la fila de configuración recordTime de esta.
+            int conta = 0, conta2 = 0;
+            public void run() { // Las clases que comienzan por f en esta parte, son utilizadas para gestionar más fácil la información desde el archivo de json. Para cargarlas a la base de datos ya se hace la respectiva conversión
+                
+                System.out.println("Ejecuta la funcion run()");
                 
                 Date now = new Date();
                 FormatMeasure formatmeasure = new FormatMeasure();
@@ -132,58 +72,34 @@ public class Operaciones {
                         FPhase fphase = new FPhase();
                         fphase.setPhase(phase);
                         List<Fmeasure> fmeasures = new ArrayList<>();
-                        for (int j = 1; j <= numMeasures; j++) {
-                            Fmeasure fmeasure = new Fmeasure();
-                            fmeasure.setQuantityID(j);
-                            fmeasure.setValue(measureValues[j-1]*(1 + tolerance*(Math.random()*2-1)/100));
-                            fmeasures.add(fmeasure);
+                        
+                        if (aleatorios){ 
+                            fmeasures = customMethods.getRandomValues(voltage,current,powerFactor,numMeasures,tolerance,quantitiesIDtoMeasureInst);
+                        }
+                        else 
+                        {
+                            final int phaseFinal = phase;
+                            fmeasures = ADEController.getValuesFromRegisters(instRegisters.stream().filter(r -> r.getPhase() == phaseFinal).collect(Collectors.toList()), iterationsForMeanValue);
+                            int g = 0;
                         }
                         fphase.setFmeasures(fmeasures);
                         fphases.add(fphase);
                     }
                     formatmeasure.setFPhases(fphases);
-                    customMethods.toJson(formatmeasure,"D:\\file.json");
+                    customMethods.toJson(formatmeasure,jsonAddress); //Guarda los datos en formato json para ser leídos por la página web
+                    System.out.println("Medidas registradas en " + jsonAddress);
+                    Thread.sleep(10);
                     if (!customMethods.isAnyTrue(phases)) {
                         System.out.println("Ninguna fase seleccionada. Revise la pestaña Measurement");
                     }
                 }
                 catch(Exception ex){
+                    Logger.getLogger(Operaciones.class.getName()).log(Level.SEVERE, null, ex);
                     System.out.println("Hubo en error en la ejecución. Error: " + ex.toString());
                 }
-
-
-
-//                    try{
-//                        for (int phase = 0; phase < phases.length; phase++) {
-//                            if (phases[phase] == true) {
-//                                measures = new ArrayList<Measure>();
-//                                measurements.add(new Measurement(meter, now, phase));
-//                                for (int j = 1; j <= numMeasures; j++) {
-//                                    Quantity quantity = new Quantity();
-//                                    quantity.setId(j);
-//                                    measures.add(new Measure(measurements.get(measurements.size()-1), quantity, measureValues[j-1]*(1 + tolerance*(Math.random()*2-1)/100)));
-//                                }
-//                                measuresTotal.add(measures);
-//                            }
-//                            List<Object> activity = new ArrayList<Object>();
-//                            activity.add(measurements);
-//                            activity.add(measures);
-//                            
-//                            customMethods.toJson(measures,"D:\\file.json");
-//                            
-//                        }
-//                        if (!customMethods.isAnyTrue(phases)) {
-//                            System.out.println("Ninguna fase seleccionada. Revise la pestaña Measurement");
-//                        }
-//                    }
-//                    catch(Exception ex){
-//                        System.out.println("Hubo en error en la ejecución. Error: " + ex.toString());
-//                    }
-//                    
-
-                if(modelMethods.getComparativeTime(now))
+                
+                if(modelMethods.getComparativeTime(now) )
                 {
-                    int conta = 0, conta2 = 0;
                     List<Measure> measures = new ArrayList<Measure>();
                     List<List<Measure>> measuresTotal = new ArrayList<List<Measure>>();
                     List<Measurement> measurements = new ArrayList<Measurement>();
@@ -201,11 +117,11 @@ public class Operaciones {
                             quantity.setId(fmeasures.get(j).getQuantityID());
                             measures.add(new Measure(measurement, quantity, fmeasures.get(j).getValue()));
                             conta++;
-                            insertMeasureView.getTextField_insertedMeasures().setText(String.valueOf(conta));
+                            measureManagerGUI.getTextField_insertedMeasures().setText(String.valueOf(conta));
                         }
                         conta2++;
                         insertListMeasures(measures);
-                        insertMeasureView.getTextField_insertedMeasurements().setText(String.valueOf(conta2));
+                        measureManagerGUI.getTextField_insertedMeasurements().setText(String.valueOf(conta2));
                         System.out.println("Medidas insertadas");               
                     }
                 }   
@@ -213,15 +129,45 @@ public class Operaciones {
         };
         
         executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(scriptRunnable, 0, period, TimeUnit.SECONDS);
-        
-        
+        int delay = modelMethods.getDelayToStartReadings(new Date(),period);
+        executor.scheduleAtFixedRate(scriptRunnable, delay, period, TimeUnit.SECONDS);
     }
+    
+    public Measurement insertSingleMeasurement(Measurement measurement)
+    {
+        SessionFactory sessionFactory = NewHibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        int id = (int)session.save(measurement);
+        tx.commit();
+        measurement = (Measurement)session.get(Measurement.class, id);
+        session.close();
+        //JOptionPane.showMessageDialog(null, "Single Measurement inserted correctly");
+        return measurement;
+    }
+    
+    public void insertListMeasures(List<Measure> Measures)
+    {
+        SessionFactory sessionFactory = NewHibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        for (Iterator<Measure> iterator = Measures.iterator(); iterator.hasNext();) {
+            Measure measure = iterator.next();
+            session.save(measure);
+        }        
+        tx.commit();
+        session.close();
+        //JOptionPane.showMessageDialog(null, "List of Measures inserted correctly");
+    }
+
+    
+    
    
 
     public void stopInfiniteLoop() {
         System.out.println("Entró al stopInfiniteLoop");
         executor.shutdown();
     }   
+    
     
 }

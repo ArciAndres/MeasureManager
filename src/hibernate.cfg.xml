@@ -51,6 +51,7 @@ Contributor(s):
     <mapping resource="Modelo/User.hbm.xml"/>
     <mapping resource="Modelo/Digitalcontrol.hbm.xml"/>
     <mapping resource="Modelo/Config.hbm.xml"/>
+    <mapping resource="Modelo/Magnitude.hbm.xml"/>
     <mapping resource="Modelo/Location.hbm.xml"/>
     <mapping resource="Modelo/Quantity.hbm.xml"/>
     <mapping resource="Modelo/Measure.hbm.xml"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated May 28, 2017 9:40:44 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Jun 11, 2017 11:33:44 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="Modelo.Location" table="location" catalog="sgmudenar" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
@@ -19,13 +19,13 @@
         </property>
         <set name="meters" table="meter" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="id_location" />
+                <column name="locationId" />
             </key>
             <one-to-many class="Modelo.Meter" />
         </set>
         <set name="logs" table="log" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="id_location" />
+                <column name="locationId" />
             </key>
             <one-to-many class="Modelo.Log" />
         </set>

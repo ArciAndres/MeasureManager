@@ -1,5 +1,5 @@
 package Modelo;
-// Generated May 28, 2017 9:40:44 PM by Hibernate Tools 4.3.1
+// Generated Jun 11, 2017 11:33:42 PM by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -12,24 +12,16 @@ public class Quantity  implements java.io.Serializable {
 
 
      private Integer id;
-     private String name;
-     private String symbol;
-     private String unit;
-     private String unitSymbol;
+     private Magnitude magnitude;
+     private String description;
      private Set measures = new HashSet(0);
 
     public Quantity() {
     }
 
-	
-    public Quantity(String name) {
-        this.name = name;
-    }
-    public Quantity(String name, String symbol, String unit, String unitSymbol, Set measures) {
-       this.name = name;
-       this.symbol = symbol;
-       this.unit = unit;
-       this.unitSymbol = unitSymbol;
+    public Quantity(Magnitude magnitude, String description, Set measures) {
+       this.magnitude = magnitude;
+       this.description = description;
        this.measures = measures;
     }
    
@@ -40,33 +32,19 @@ public class Quantity  implements java.io.Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-    public String getName() {
-        return this.name;
+    public Magnitude getMagnitude() {
+        return this.magnitude;
     }
     
-    public void setName(String name) {
-        this.name = name;
+    public void setMagnitude(Magnitude magnitude) {
+        this.magnitude = magnitude;
     }
-    public String getSymbol() {
-        return this.symbol;
-    }
-    
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-    public String getUnit() {
-        return this.unit;
+    public String getDescription() {
+        return this.description;
     }
     
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-    public String getUnitSymbol() {
-        return this.unitSymbol;
-    }
-    
-    public void setUnitSymbol(String unitSymbol) {
-        this.unitSymbol = unitSymbol;
+    public void setDescription(String description) {
+        this.description = description;
     }
     public Set getMeasures() {
         return this.measures;

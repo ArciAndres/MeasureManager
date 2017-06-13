@@ -40,4 +40,10 @@ public class modelMethods {
         int recordTimeSeconds = recordTime.get(Calendar.MINUTE) * 60 + recordTime.get(Calendar.SECOND);
         return nowToSeconds % recordTimeSeconds == 0 ; 
     }
+    
+    public static int getDelayToStartReadings(Date dte, long period) {
+        Calendar now = customMethods.toCalendar(dte);
+        int delay = 10-now.get(Calendar.SECOND)%10;
+        return delay;
+    }
 }

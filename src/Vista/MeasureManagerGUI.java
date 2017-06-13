@@ -6,21 +6,25 @@
 package Vista;
 import Controlador.Operaciones;
 import Modelo.*;
+import com.pi4j.io.i2c.I2CFactory;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextField;
 
 /**
  *
  * @author ANDRES ARCINIEGAS
  */
-public class InsertMeasure extends javax.swing.JFrame {
+public class MeasureManagerGUI extends javax.swing.JFrame {
 
     Operaciones operaciones;
     
     
-    public InsertMeasure() {
+    public MeasureManagerGUI() {
         initComponents();
         operaciones = new Operaciones(this);
     }
@@ -41,14 +45,6 @@ public class InsertMeasure extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        MeasurePanel = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        TextField_value = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        TextField_id_quantity = new javax.swing.JTextField();
-        btn_insertMeasure = new javax.swing.JButton();
         PanelSingleLoop = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         TextField_numMeasurements = new javax.swing.JTextField();
@@ -58,17 +54,17 @@ public class InsertMeasure extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         TextField_tolerance = new javax.swing.JTextField();
         TextField_valueLoop = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
         MeasurementPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         TextField_id_meter = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        TextField_phase = new javax.swing.JTextField();
+        TextField_IterationsForMeanValue = new javax.swing.JTextField();
         cb_phase1 = new javax.swing.JCheckBox();
         cb_phase2 = new javax.swing.JCheckBox();
         cb_phase3 = new javax.swing.JCheckBox();
+        cb_aleatorios = new javax.swing.JCheckBox();
         PanelEndlessLoop = new javax.swing.JPanel();
         TextField_current = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
@@ -94,74 +90,6 @@ public class InsertMeasure extends javax.swing.JFrame {
 
         jTabbedPane1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
 
-        jLabel7.setText("ID de Measurement");
-
-        jLabel8.setText("Valor");
-
-        TextField_value.setText("10");
-
-        jLabel5.setText("Por defecto se añade ");
-
-        jLabel9.setText("ID Cantidad");
-
-        TextField_id_quantity.setText("1");
-
-        btn_insertMeasure.setText("Insertar Medida");
-        btn_insertMeasure.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_insertMeasureActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout MeasurePanelLayout = new javax.swing.GroupLayout(MeasurePanel);
-        MeasurePanel.setLayout(MeasurePanelLayout);
-        MeasurePanelLayout.setHorizontalGroup(
-            MeasurePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MeasurePanelLayout.createSequentialGroup()
-                .addGroup(MeasurePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MeasurePanelLayout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addGroup(MeasurePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(MeasurePanelLayout.createSequentialGroup()
-                                .addGroup(MeasurePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel7))
-                                .addGap(38, 38, 38)
-                                .addGroup(MeasurePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(TextField_value, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(MeasurePanelLayout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(38, 38, 38)
-                                .addComponent(TextField_id_quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(31, 31, 31))))
-                    .addGroup(MeasurePanelLayout.createSequentialGroup()
-                        .addGap(154, 154, 154)
-                        .addComponent(btn_insertMeasure)))
-                .addContainerGap(267, Short.MAX_VALUE))
-        );
-        MeasurePanelLayout.setVerticalGroup(
-            MeasurePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MeasurePanelLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(MeasurePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(25, 25, 25)
-                .addGroup(MeasurePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(TextField_value, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(MeasurePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(TextField_id_quantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38)
-                .addComponent(btn_insertMeasure)
-                .addContainerGap(198, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Measure", MeasurePanel);
-
         jLabel6.setText("Number of Measurements");
 
         TextField_numMeasurements.setText("10");
@@ -174,43 +102,31 @@ public class InsertMeasure extends javax.swing.JFrame {
 
         jLabel12.setText("Tolerance (%)");
 
-        TextField_tolerance.setText("10");
+        TextField_tolerance.setText("20");
 
         TextField_valueLoop.setText("120");
-
-        jButton1.setText("GO!");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout PanelSingleLoopLayout = new javax.swing.GroupLayout(PanelSingleLoop);
         PanelSingleLoop.setLayout(PanelSingleLoopLayout);
         PanelSingleLoopLayout.setHorizontalGroup(
             PanelSingleLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelSingleLoopLayout.createSequentialGroup()
-                .addGroup(PanelSingleLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(64, 64, 64)
+                .addGroup(PanelSingleLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(PanelSingleLoopLayout.createSequentialGroup()
-                        .addGap(64, 64, 64)
+                        .addComponent(jLabel6)
+                        .addGap(57, 57, 57)
+                        .addComponent(TextField_numMeasurements, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(PanelSingleLoopLayout.createSequentialGroup()
                         .addGroup(PanelSingleLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(PanelSingleLoopLayout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(57, 57, 57)
-                                .addComponent(TextField_numMeasurements, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(PanelSingleLoopLayout.createSequentialGroup()
-                                .addGroup(PanelSingleLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jLabel12))
-                                .addGap(57, 57, 57)
-                                .addGroup(PanelSingleLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(TextField_numMeasures, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TextField_tolerance, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TextField_valueLoop, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(PanelSingleLoopLayout.createSequentialGroup()
-                        .addGap(222, 222, 222)
-                        .addComponent(jButton1)))
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel12))
+                        .addGap(57, 57, 57)
+                        .addGroup(PanelSingleLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(TextField_numMeasures, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TextField_tolerance, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TextField_valueLoop, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(247, Short.MAX_VALUE))
         );
         PanelSingleLoopLayout.setVerticalGroup(
@@ -232,9 +148,7 @@ public class InsertMeasure extends javax.swing.JFrame {
                 .addGroup(PanelSingleLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(TextField_tolerance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(46, 46, 46)
-                .addComponent(jButton1)
-                .addContainerGap(148, Short.MAX_VALUE))
+                .addContainerGap(229, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("SingleLoop", PanelSingleLoop);
@@ -249,7 +163,7 @@ public class InsertMeasure extends javax.swing.JFrame {
 
         jLabel4.setText("Fase");
 
-        TextField_phase.setText("0");
+        TextField_IterationsForMeanValue.setText("20");
 
         cb_phase1.setText("Fase 1");
 
@@ -257,13 +171,16 @@ public class InsertMeasure extends javax.swing.JFrame {
 
         cb_phase3.setText("Fase 3");
 
+        cb_aleatorios.setSelected(true);
+        cb_aleatorios.setText("Aleatorios?");
+
         javax.swing.GroupLayout MeasurementPanelLayout = new javax.swing.GroupLayout(MeasurementPanel);
         MeasurementPanel.setLayout(MeasurementPanelLayout);
         MeasurementPanelLayout.setHorizontalGroup(
             MeasurementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MeasurementPanelLayout.createSequentialGroup()
                 .addGap(58, 58, 58)
-                .addGroup(MeasurementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(MeasurementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(MeasurementPanelLayout.createSequentialGroup()
                         .addGroup(MeasurementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -271,17 +188,25 @@ public class InsertMeasure extends javax.swing.JFrame {
                         .addGap(38, 38, 38)
                         .addGroup(MeasurementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(TextField_id_meter, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(MeasurementPanelLayout.createSequentialGroup()
+                                .addComponent(TextField_id_meter, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(77, 77, 77)
+                                .addComponent(cb_aleatorios))))
                     .addGroup(MeasurementPanelLayout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addGap(38, 38, 38)
                         .addGroup(MeasurementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cb_phase1)
-                            .addComponent(TextField_phase, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cb_phase2)
-                            .addComponent(cb_phase3))
-                        .addGap(113, 113, 113)))
-                .addContainerGap(226, Short.MAX_VALUE))
+                            .addGroup(MeasurementPanelLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(MeasurementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cb_phase1)
+                                    .addComponent(cb_phase2)
+                                    .addComponent(cb_phase3))
+                                .addGap(150, 150, 150))
+                            .addGroup(MeasurementPanelLayout.createSequentialGroup()
+                                .addGap(82, 82, 82)
+                                .addComponent(TextField_IterationsForMeanValue, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap(171, Short.MAX_VALUE))
         );
         MeasurementPanelLayout.setVerticalGroup(
             MeasurementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -293,18 +218,19 @@ public class InsertMeasure extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(MeasurementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(TextField_id_meter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TextField_id_meter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cb_aleatorios))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(MeasurementPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(TextField_phase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TextField_IterationsForMeanValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(cb_phase1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cb_phase2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cb_phase3)
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addContainerGap(166, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Measurement", MeasurementPanel);
@@ -332,7 +258,7 @@ public class InsertMeasure extends javax.swing.JFrame {
 
         jLabel19.setText("Period");
 
-        TextField_period.setText("1");
+        TextField_period.setText("2");
 
         jLabel21.setText("Frequency");
 
@@ -460,7 +386,7 @@ public class InsertMeasure extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("While(1)", PanelEndlessLoop);
+        jTabbedPane1.addTab("While", PanelEndlessLoop);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -472,51 +398,42 @@ public class InsertMeasure extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_insertMeasureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertMeasureActionPerformed
-        Meter meter = new Meter();
-        meter.setId(Integer.parseInt(TextField_id_meter.getText()));
-        Measurement measurement = new Measurement(meter, new Date(), Integer.parseInt(TextField_phase.getText()));
-        List<Measure> Measures = new ArrayList<Measure>();
-        Quantity quantity = new Quantity();
-        quantity.setId(Integer.parseInt(TextField_id_quantity.getText()));
-        
-        Measures.add(new Measure(measurement, quantity, Integer.parseInt(TextField_value.getText())));
-        
-        operaciones.insertMeasureNow(measurement, Measures);
-       
-    }//GEN-LAST:event_btn_insertMeasureActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Meter meter = new Meter();
-        meter.setId(Integer.parseInt(TextField_id_meter.getText()));
-        Measurement measurement = new Measurement(meter, new Date(), Integer.parseInt(TextField_phase.getText()));
-        operaciones.loopInsertMeasures(measurement, Integer.parseInt(TextField_numMeasurements.getText()), Integer.parseInt(TextField_numMeasures.getText()), Double.parseDouble(TextField_valueLoop.getText()), Double.parseDouble(TextField_tolerance.getText()));
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
         boolean[] phases = new boolean[]{cb_phase1.isSelected(), cb_phase2.isSelected(), cb_phase3.isSelected()};
                 
-        operaciones.loopInfinite(Double.parseDouble(TextField_voltage.getText()),
-                Double.parseDouble(TextField_current.getText()),
-                Double.parseDouble(TextField_powerFactor.getText()),
-                Double.parseDouble(TextField_frequency.getText()),
-                Double.parseDouble(TextField_phaseValue.getText()),
-                Long.parseLong(TextField_period.getText()),
-                Integer.parseInt(TextField_id_meter.getText()),
-                phases,
-                Integer.parseInt(TextField_numMeasurements.getText()),
-                Integer.parseInt(TextField_numMeasures.getText()),
-                Integer.parseInt(TextField_tolerance.getText())                   
-                );
+        try {
+            operaciones.loopInfinite(Double.parseDouble(TextField_voltage.getText()),
+                    Double.parseDouble(TextField_current.getText()),
+                    Double.parseDouble(TextField_powerFactor.getText()),
+                    Double.parseDouble(TextField_frequency.getText()),
+                    Double.parseDouble(TextField_phaseValue.getText()),
+                    Long.parseLong(TextField_period.getText()),
+                    Integer.parseInt(TextField_id_meter.getText()),
+                    phases,
+                    Integer.parseInt(TextField_numMeasurements.getText()),
+                    Integer.parseInt(TextField_numMeasures.getText()),
+                    Integer.parseInt(TextField_tolerance.getText()),
+                    cb_aleatorios.isSelected(),
+                    Integer.parseInt(TextField_IterationsForMeanValue.getText())
+            );
+        } catch (I2CFactory.UnsupportedBusNumberException ex) {
+            Logger.getLogger(MeasureManagerGUI.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
+        } catch (IOException ex) {
+            Logger.getLogger(MeasureManagerGUI.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MeasureManagerGUI.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -541,50 +458,49 @@ public class InsertMeasure extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InsertMeasure.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MeasureManagerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InsertMeasure.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MeasureManagerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InsertMeasure.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MeasureManagerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InsertMeasure.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MeasureManagerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InsertMeasure().setVisible(true);
+                new MeasureManagerGUI().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel MeasurePanel;
     private javax.swing.JPanel MeasurementPanel;
     private javax.swing.JPanel PanelEndlessLoop;
     private javax.swing.JPanel PanelSingleLoop;
+    private javax.swing.JTextField TextField_IterationsForMeanValue;
     private javax.swing.JTextField TextField_current;
     private javax.swing.JTextField TextField_frequency;
     private javax.swing.JTextField TextField_id_meter;
-    private javax.swing.JTextField TextField_id_quantity;
     private javax.swing.JTextField TextField_insertedMeasurements;
     private javax.swing.JTextField TextField_insertedMeasures;
     private javax.swing.JTextField TextField_numMeasurements;
     private javax.swing.JTextField TextField_numMeasures;
     private javax.swing.JTextField TextField_period;
-    private javax.swing.JTextField TextField_phase;
     private javax.swing.JTextField TextField_phaseValue;
     private javax.swing.JTextField TextField_powerFactor;
     private javax.swing.JTextField TextField_tolerance;
-    private javax.swing.JTextField TextField_value;
     private javax.swing.JTextField TextField_valueLoop;
     private javax.swing.JTextField TextField_voltage;
-    private javax.swing.JButton btn_insertMeasure;
+    private javax.swing.JCheckBox cb_aleatorios;
     private javax.swing.JCheckBox cb_phase1;
     private javax.swing.JCheckBox cb_phase2;
     private javax.swing.JCheckBox cb_phase3;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
@@ -603,11 +519,7 @@ public class InsertMeasure extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }

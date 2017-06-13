@@ -41,13 +41,14 @@ Contributor(s):
 -->
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="sgmudenar"/>
-  <table-filter match-name="config"/>
   <table-filter match-name="meter"/>
-  <table-filter match-name="log"/>
   <table-filter match-name="digitalcontrol"/>
-  <table-filter match-name="measurement"/>
-  <table-filter match-name="measure"/>
-  <table-filter match-name="quantity"/>
-  <table-filter match-name="user"/>
   <table-filter match-name="location"/>
+  <table-filter match-name="log"/>
+  <table-filter match-name="config"/>
+  <table-filter match-name="measure"/>
+  <table-filter match-name="user"/>
+  <table-filter match-name="quantity"/>
+  <table-filter match-name="magnitude"/>
+  <table-filter match-name="measurement"/>
 </hibernate-reverse-engineering>
