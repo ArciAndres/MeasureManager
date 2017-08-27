@@ -40,7 +40,7 @@ public class Operaciones {
         ADERegister.initRegisterlist();
     }
     
-    int[] quantitiesIDtoMeasureInst = new int[]{18,19}; // 18 y 19 = V e I RMS
+    int[] quantitiesIDtoMeasureInst = new int[]{18,19,13,32}; // 18 y 19 = V e I RMS, 13 = Factor de Potencia, 32 =Potencia activa instantánea
     ScheduledExecutorService executor;
     
     public void loopInfinite(double voltage, double current, double powerFactor, double frequency, double phaseValue,long period, int id_meter, boolean[] phases, int numMeasurements, int numMeasures, int tolerance, boolean aleatorios, int iterationsForMeanValue) throws I2CFactory.UnsupportedBusNumberException, IOException, InterruptedException
@@ -57,7 +57,7 @@ public class Operaciones {
         Runnable scriptRunnable = new Runnable() {    
             // Se puede determinar el período en el que se actualizan las medidas, pero a la base de datos solamente
             // se cargan con el período que se especifica en la fila de configuración recordTime de esta.
-            int conta = 0, conta2 = 0;
+            int conta = 0, conta2 = 0, contaErrores = 0;
             public void run() { // Las clases que comienzan por f en esta parte, son utilizadas para gestionar más fácil la información desde el archivo de json. Para cargarlas a la base de datos ya se hace la respectiva conversión
                 
                 System.out.println("Ejecuta la funcion run()");
@@ -96,6 +96,9 @@ public class Operaciones {
                 catch(Exception ex){
                     Logger.getLogger(Operaciones.class.getName()).log(Level.SEVERE, null, ex);
                     System.out.println("Hubo en error en la ejecución. Error: " + ex.toString());
+                    contaErrores++;
+                    System.out.println("Errores en esta ejecución: " + String.valueOf(contaErrores));
+                    
                 }
                 
                 if(modelMethods.getComparativeTime(now) )

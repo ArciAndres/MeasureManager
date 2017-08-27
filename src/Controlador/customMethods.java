@@ -8,8 +8,11 @@ package Controlador;
 import Modelo.Measure;
 import ModeloInterno.Fmeasure;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,6 +67,20 @@ public class customMethods {
 
     static String getJsonAddress() {
          if (customMethods.getHost().equals("raspberrypi")) { //Se asigna la ruta para leerse desde la página web
+         String dirString = "/home/pi/webApp/SGMUdenarApp/public/json/";
+         File dir = new File(dirString);
+
+             if (!dir.exists()) {   
+                try{
+                    System.out.println("creating directory: " + dir.getName());
+                    new File(dirString).mkdirs(); //Se rean los respectivos directorios
+                    try (Writer writer = new FileWriter("Output.json")) {
+                    Gson gson = new GsonBuilder().create();}
+                }
+                catch(Exception ex){
+                    System.out.println(ex.toString());
+                }
+             }
              return("/home/pi/webApp/SGMUdenarApp/public/json/db.json");
              //jsonAddress = "db.json";
          }
@@ -87,14 +104,10 @@ public class customMethods {
             fmeasure.setQuantityID(quantityIDs[j]);
             fmeasure.setValue(simulatedValues[j]*(1 + tolerance*(Math.random()*2-1)/100));
             fmeasures.add(fmeasure);
-        }
+       }
         return fmeasures;
     }
-
-
-    
-
-            
+        
             
     
 }

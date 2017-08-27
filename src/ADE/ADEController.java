@@ -165,7 +165,7 @@ public class ADEController {
     
     public static byte[] stringValidation(String strByte) throws SGMUdenarException{
         if (strByte.length()%2 != 0) {
-            throw new SGMUdenarException("La cedena de entrada debe tener un numero par de caracteres. Especificamente 8 para binario, aparte del identificador '0b'.");
+            throw new SGMUdenarException("La cadena de entrada debe tener un numero par de caracteres. Especificamente 8 para binario, aparte del identificador '0b'.");
         }
         if (strByte.substring(0,2).equals("0x")) {
             byte[] buffer = new byte[strByte.length()/2-1];

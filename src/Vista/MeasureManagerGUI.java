@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Vista;
+import ADE.ADEController;
 import Controlador.Operaciones;
 import Modelo.*;
 import com.pi4j.io.i2c.I2CFactory;
@@ -85,6 +86,7 @@ public class MeasureManagerGUI extends javax.swing.JFrame {
         jLabel23 = new javax.swing.JLabel();
         TextField_insertedMeasurements = new javax.swing.JTextField();
         TextField_insertedMeasures = new javax.swing.JTextField();
+        btn_init = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -148,7 +150,7 @@ public class MeasureManagerGUI extends javax.swing.JFrame {
                 .addGroup(PanelSingleLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(TextField_tolerance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(229, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("SingleLoop", PanelSingleLoop);
@@ -165,10 +167,13 @@ public class MeasureManagerGUI extends javax.swing.JFrame {
 
         TextField_IterationsForMeanValue.setText("20");
 
+        cb_phase1.setSelected(true);
         cb_phase1.setText("Fase 1");
 
+        cb_phase2.setSelected(true);
         cb_phase2.setText("Fase 2");
 
+        cb_phase3.setSelected(true);
         cb_phase3.setText("Fase 3");
 
         cb_aleatorios.setSelected(true);
@@ -230,7 +235,7 @@ public class MeasureManagerGUI extends javax.swing.JFrame {
                 .addComponent(cb_phase2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cb_phase3)
-                .addContainerGap(166, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Measurement", MeasurementPanel);
@@ -285,62 +290,72 @@ public class MeasureManagerGUI extends javax.swing.JFrame {
         TextField_insertedMeasures.setEditable(false);
         TextField_insertedMeasures.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
+        btn_init.setText("Init");
+        btn_init.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_initActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout PanelEndlessLoopLayout = new javax.swing.GroupLayout(PanelEndlessLoop);
         PanelEndlessLoop.setLayout(PanelEndlessLoopLayout);
         PanelEndlessLoopLayout.setHorizontalGroup(
             PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
-                .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(64, 64, 64)
+                .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
-                        .addGap(64, 64, 64)
+                        .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
+                                .addComponent(jLabel15)
+                                .addGap(57, 57, 57)
+                                .addComponent(TextField_voltage, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
+                                .addComponent(jLabel16)
+                                .addGap(57, 57, 57)
+                                .addComponent(TextField_current, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
+                                .addComponent(jLabel18)
+                                .addGap(57, 57, 57)
+                                .addComponent(TextField_powerFactor, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelEndlessLoopLayout.createSequentialGroup()
+                                    .addComponent(jLabel22)
+                                    .addGap(57, 57, 57)
+                                    .addComponent(TextField_phaseValue, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
+                                    .addComponent(jLabel21)
+                                    .addGap(57, 57, 57)
+                                    .addComponent(TextField_frequency, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jLabel20))
+                                    .addComponent(TextField_insertedMeasurements, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
-                                .addGap(115, 115, 115)
+                                .addGap(28, 28, 28)
                                 .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
-                                        .addGap(123, 123, 123)
-                                        .addComponent(jLabel23))
-                                    .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
-                                            .addComponent(jLabel19)
-                                            .addGap(57, 57, 57)
-                                            .addComponent(TextField_period, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
-                                            .addComponent(jButton2)
-                                            .addGap(56, 56, 56)
-                                            .addComponent(jButton3)))))
-                            .addComponent(jLabel17)
-                            .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
-                                    .addComponent(jLabel15)
-                                    .addGap(57, 57, 57)
-                                    .addComponent(TextField_voltage, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
-                                    .addComponent(jLabel16)
-                                    .addGap(57, 57, 57)
-                                    .addComponent(TextField_current, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
-                                    .addComponent(jLabel18)
-                                    .addGap(57, 57, 57)
-                                    .addComponent(TextField_powerFactor, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelEndlessLoopLayout.createSequentialGroup()
-                                        .addComponent(jLabel22)
-                                        .addGap(57, 57, 57)
-                                        .addComponent(TextField_phaseValue, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jLabel19)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(TextField_period, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
-                                        .addComponent(jLabel21)
-                                        .addGap(57, 57, 57)
-                                        .addComponent(TextField_frequency, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
-                        .addGap(135, 135, 135)
-                        .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel20)
-                            .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
-                                .addComponent(TextField_insertedMeasurements, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(TextField_insertedMeasures, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(71, Short.MAX_VALUE))
+                                        .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(TextField_insertedMeasures, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(btn_init)
+                                                .addGroup(PanelEndlessLoopLayout.createSequentialGroup()
+                                                    .addComponent(jButton2)
+                                                    .addGap(18, 18, 18)
+                                                    .addComponent(jButton3))))
+                                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelEndlessLoopLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel23)
+                                .addGap(43, 43, 43))))
+                    .addComponent(jLabel17))
+                .addContainerGap(128, Short.MAX_VALUE))
         );
         PanelEndlessLoopLayout.setVerticalGroup(
             PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,11 +365,15 @@ public class MeasureManagerGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
-                    .addComponent(TextField_voltage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TextField_voltage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel19)
+                    .addComponent(TextField_period, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(TextField_current, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TextField_current, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18)
@@ -362,23 +381,16 @@ public class MeasureManagerGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel21)
-                    .addComponent(TextField_frequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TextField_frequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_init))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel22)
                     .addComponent(TextField_phaseValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(45, 45, 45)
+                .addGap(18, 18, 18)
                 .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel19)
-                    .addComponent(TextField_period, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
-                .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addGap(32, 32, 32)
-                .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TextField_insertedMeasures, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TextField_insertedMeasurements, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TextField_insertedMeasurements, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TextField_insertedMeasures, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelEndlessLoopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20)
@@ -398,8 +410,7 @@ public class MeasureManagerGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
-                .addContainerGap())
+                .addComponent(jTabbedPane1))
         );
 
         pack();
@@ -439,6 +450,18 @@ public class MeasureManagerGUI extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         operaciones.stopInfiniteLoop();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btn_initActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_initActionPerformed
+        try {
+            ADEController.inicializacionADE();        //Secuencia de inicialización
+        } catch (I2CFactory.UnsupportedBusNumberException ex) {
+            Logger.getLogger(MeasureManagerGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MeasureManagerGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MeasureManagerGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btn_initActionPerformed
     
     
     /**
@@ -497,6 +520,7 @@ public class MeasureManagerGUI extends javax.swing.JFrame {
     private javax.swing.JTextField TextField_tolerance;
     private javax.swing.JTextField TextField_valueLoop;
     private javax.swing.JTextField TextField_voltage;
+    private javax.swing.JButton btn_init;
     private javax.swing.JCheckBox cb_aleatorios;
     private javax.swing.JCheckBox cb_phase1;
     private javax.swing.JCheckBox cb_phase2;
